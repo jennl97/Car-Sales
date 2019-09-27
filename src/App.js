@@ -12,11 +12,13 @@ import {addFeature, removeFeature } from './actions/index'
 //also - make sure to pass props down into individual items - see line 41 for reference
 const App = (props) => {
 
+  //this gets passed to <AddedFeatures />
   const removeFeature = item => {
     // dispatch an action here to remove an item
     props.removeFeature(item);
   };
 
+  //this gets passed to <AdditionalFeatures />
   const buyItem = item => {
     // dipsatch an action here to add an item
     props.addFeature(item);
@@ -26,10 +28,10 @@ const App = (props) => {
     <div className="boxes">
       <div className="box">
         <Header car={props.car} />
-        <AddedFeatures car={props.car} />
+        <AddedFeatures car={props.car} removeFeature={removeFeature}/>
       </div>
       <div className="box">
-        <AdditionalFeatures store={props.store} />
+        <AdditionalFeatures store={props.store} buyItem={buyItem}/>
         <Total car={props.car} additionalPrice={props.additionalPrice} />
       </div>
     </div>
@@ -45,7 +47,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {addFeature, removeFeature})(App); //function currying
+export default connect(mapStateToProps, {
+  addFeature: addFeature, 
+  removeFeature: removeFeature
+})(App); //function currying
 
 //step 4 - connecting components
 //call the connect function twice (currying). and pass in the component to the second call
